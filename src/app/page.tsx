@@ -1,113 +1,152 @@
-import Image from "next/image";
-
+"use client"
+import { useState, useEffect } from "react";
+type Ingredient = {
+  image?: string;
+  name: string;
+  amount: string;
+  location?: string;
+}
 export default function Home() {
+  const images = ["https://discord.mx/SLw6TX1YVZ.png", "https://discord.mx/yKflUCeTJG.png", "https://discord.mx/0WF2SZD9CN.png"];
+  const steps = ["https://discord.mx/tVA6CWAk9e.png", "https://discord.mx/JumSpDFTtf.png", "https://discord.mx/LjKPfobnQ1.png", "https://discord.mx/qS8FNcf6fk.png", "https://discord.mx/npXgVa2Zbl.png", "https://discord.mx/SLw6TX1YVZ.png"]
+  const [imageIndex, setimageIndex] = useState(0);
+  const [stepIndex, setstepIndex] = useState(0);
+  const ingredients: Ingredient[] = [{
+    name: "Croûte à Tarte",
+    amount: "1",
+    location: "de la boulangerie/pâtisserie."
+  }, {
+    name: "Fraises",
+    amount: "1 Litre",
+    location: "du magasin de fruits."
+  },
+  {
+    name: "Sucre",
+    amount: "1 Tasse",
+    location: "du supermarché."
+  },
+  {
+    name: "Fécule de Maïs",
+    amount: "3 Cuillères à Soupe",
+    location: "du supermarché."
+  }, {
+    name: "L'eau",
+    amount: "¾ Tasse",
+    location: "du supermarché."
+  }, {
+    name: "Crème Fouettée",
+    amount: "½ Tasse",
+    location: "du supermarché."
+  }]
+
+  const directions = [
+    "Mettre 1/2 de les fraises dans un votre croûte à tarte et l'autre 1/2 dans un poêle.",
+    "Ajouter le sucre aux fraises dans la poêle. Mettre sur moyenne chaleur, souvent en remuant.",
+    "Mettre la fécule de maïs et l'eau dans un petit bol alors remuer. Suivant, mélangez-le avec le mélange précédent. Remuer pour 10 minutes à feu doux.",
+    "Verser les fraises mélange sur les fraises dans le croûte à tarte, froideur pour 3 heures.",
+    "Ajouter votre crème fouettée.",
+    "Et voilà ! Jouis :)"
+  ]
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setimageIndex((prevIndex) => (prevIndex + 1) % images.length);
+      setstepIndex((prevIndex) => (prevIndex + 1) % steps.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div className="bg-[#fffaf5] w-full h-full flex p-20">
+      <div className="flex flex-row justify-between">
+        <div className="flex flex-col gap-7 w-[30%]">
+          <div className="flex flex-col" style={{ height: "250px" }}>
+            <div
+              className="result w-[400px] rounded-md"
+              style={{
+                backgroundImage: `url(${images[imageIndex]})`,
+                transition: "background-image 0.5s ease-in-out",
+                height: "100%",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            ></div>
+          </div>
+          <h1 className="text-5xl font-bold text-black">Ingrédients</h1>
+          <div className="flex flex-col gap-2">
+            {ingredients.map((ingredient: Ingredient, index: number) => {
+              return (
+                <div key={index} className="flex flex-col gap-2">
+                  <div className="flex flex-row items-center justify-between">
+                    <div className="flex gap-2 items-center justify-center">
+                      <div className="bg-[#fff2e0] flex items-center justify-center rounded-full p-2">
+                        <div className="w-5 h-5 rounded-full" />
+                      </div>
+                      <p>{ingredient.name}</p>
+                    </div>
+                    <p>{ingredient.amount}</p>
+                  </div>
+                  <p className="text-xs pl-3">Achetez {ingredient.name} {ingredient.location}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-8 w-[30%]">
+          <h1 className="text-5xl font-bold text-black">Tarte à la fraise</h1>
+          <div className="grid grid-cols-2 gap-5 pl-2 pt-5">
+            <div className="flex flex-row gap-3">
+              <p className="text-gray-500">Le total</p>
+              <p className="text-black">3h 30m</p>
+            </div>
+            <div className="flex flex-row gap-3">
+              <p className="text-gray-500">La préparation</p>
+              <p className="text-black">15m</p>
+            </div>
+            <div className="flex flex-row gap-3">
+              <p className="text-gray-500">Le temps de cuisson</p>
+              <p className="text-black">10m</p>
+            </div>
+            <div className="flex flex-row gap-3">
+              <p className="text-gray-500">Le temps additionnel</p>
+              <p className="text-black">3h</p>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col gap-7 items-end w-[30%]">
+          <div className="flex flex-col" style={{ height: "250px" }}>
+            <div
+              className="result w-[400px] rounded-md"
+              style={{
+                backgroundImage: `url(${steps[stepIndex]})`,
+                transition: "background-image 0.5s ease-in-out",
+                height: "100%",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            ></div>
+          </div>
+          <h1 className="text-5xl font-bold text-black text-right">Directions</h1>
+          <div className="flex flex-col gap-5">
+            {directions.map((direction: string, index: number) => {
+              return (
+                <div key={index} className="flex flex-row items-center justify-between">
+                  <div className="flex gap-2 items-center justify-center">
+                    <div className="bg-[#fff2e0] flex items-center justify-center rounded-full p-2">
+                      <div className="w-5 h-5 flex items-center justify-center">
+                        <p className="text-lg font-bold">{index + 1}</p>
+                      </div>
+                    </div>
+                    <p>{direction}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
-
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    </div>
   );
 }
